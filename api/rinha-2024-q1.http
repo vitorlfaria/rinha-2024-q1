@@ -1,6 +1,19 @@
-@rinha_2024_q1_HostAddress = http://localhost:5144
+@url = http://localhost:5144
 
-GET {{rinha_2024_q1_HostAddress}}/weatherforecast/
+GET {{url}}/healthcheck/
 Accept: application/json
 
 ###
+POST {{url}}/clientes/1/transacoes
+Accept: application/json
+Content-Type: application/json
+
+{
+    "valor": 1000,
+    "tipo": "c",
+    "descricao": "descricao"
+}
+
+###
+GET {{url}}/clientes/1/extrato
+Accept: application/json
