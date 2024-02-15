@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>rinha_2024_q1</RootNamespace>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
 </Project>
