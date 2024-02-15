@@ -1,6 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using rinha_2024_q1.Data;
 using rinha_2024_q1.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<RinhaDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 
