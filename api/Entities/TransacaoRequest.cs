@@ -13,5 +13,8 @@ public sealed record TransacaoRequest
         AssertionConcern.AssertLength(Descricao, 1, 10, "Descrição deve ter entre 1 e 10 caracteres");
         AssertionConcern.AssertLength(Tipo, 1, 1, "Tipo deve ter 1 caractere");
         AssertionConcern.AssertPositive(Valor, "Valor deve ser positivo");
+
+        if(Tipo != "c" && Tipo != "d")
+            throw new ArgumentException("Tipo inválido");
     }
 }
