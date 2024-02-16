@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+COPY rinha-2024-q1.csproj .
+RUN dotnet restore
+
+COPY . .
+
+CMD ["dotnet", "watch", "run", "--project", "api/rinha-2024-q1.csproj"]

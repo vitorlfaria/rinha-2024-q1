@@ -35,7 +35,7 @@ CREATE TABLE public."Transacoes" (
     "Valor" integer NOT NULL,
     "Tipo" character(1) NOT NULL,
     "Descricao" text NOT NULL,
-    "Realizado_Em" timestamp with time zone NOT NULL,
+    "Realizada_Em" timestamp with time zone NOT NULL,
     "ClienteId" integer NOT NULL
 );
 

@@ -3,7 +3,16 @@ version: '3.9'
 services:
   api1: &api1
     hostname: api1
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/obj/
+      - /app/bin/
+      - /app/api/obj/
+      - /app/api/bin/
+      - ~/aspnet/https:/https:ro
     depends_on: 
       - db
     environment:
