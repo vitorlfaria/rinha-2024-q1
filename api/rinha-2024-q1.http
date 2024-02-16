@@ -1,4 +1,4 @@
-@url = http://localhost:5144
+@url = http://localhost:8081
 
 GET {{url}}/healthcheck/
 Accept: application/json
@@ -16,4 +16,8 @@ Content-Type: application/json
 
 ###
 GET {{url}}/clientes/1/extrato
+Accept: application/json
+
+###
+GET {{url}}/clientes/
 Accept: application/json

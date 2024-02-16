@@ -1,13 +1,13 @@
 ﻿namespace rinha_2024_q1.Entities;
 
-public class Transacao(int clienteId, int valor, string tipo, string descricao)
+public class Transacao
 {
     public int Id { get; set; }
-    public int Valor { get; set; } = valor;
-    public string Tipo { get; set; } = tipo;
-    public string Descricao { get; set; } = descricao;
-    public DateTime Realizda_Em { get; set; } = DateTime.Now;
-    public int ClienteId { get; set; } = clienteId;
+    public int Valor { get; set; }
+    public string Tipo { get; set; }
+    public string Descricao { get; set; }
+    public DateTime Realizada_Em { get; set; }
+    public int ClienteId { get; set; }
 
     public void Validate()
     {

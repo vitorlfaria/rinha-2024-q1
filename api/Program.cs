@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using rinha_2024_q1;
 using rinha_2024_q1.Data;
 using rinha_2024_q1.Entities;
 
@@ -11,11 +12,11 @@ builder.Services.AddDbContext<RinhaDbContext>(options =>
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-
 app.MapGet("/healthcheck", () => "Working, thanks!");
 
-app.MapPost("clientes/{id}/transacoes", (int id, TransacaoRequest transacaorequest) => {
+var clientApi = app.MapGroup("/clientes");
+
+clientApi.MapPost("/{id}/transacoes", (int id, TransacaoRequest transacaorequest) => {
     try
     {
         transacaorequest.Validate();
@@ -28,7 +29,7 @@ app.MapPost("clientes/{id}/transacoes", (int id, TransacaoRequest transacaoreque
     }
 });
 
-app.MapGet("clientes/{id}/extrato", (int id) => {
+clientApi.MapGet("/{id}/extrato", (int id) => {
     var extrato = new Extrato
     {
         Saldo = new Saldo
@@ -46,5 +47,7 @@ app.MapGet("clientes/{id}/extrato", (int id) => {
 
     return Results.Ok(extrato);
 });
+
+clientApi.MapGet("/", ClienteService.GetClientes);
 
 app.Run();
