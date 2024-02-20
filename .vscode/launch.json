@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Debug .NET Core in Docker",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickRemoteProcess}",
+            "sourceFileMap": {
+                "/app": "${workspaceRoot}"
+            },
+            "pipeTransport": {
+                "pipeCwd": "${workspaceRoot}",
+                "pipeProgram": "docker",
+                "pipeArgs": ["exec", "-i", "rinha-2024-q1-api1-1"],
+                "quoteArgs": false,
+                "debuggerPath": "/vsdbg/vsdbg"
+            }
+        }
+    ],
+}

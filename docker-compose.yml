@@ -6,6 +6,13 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+    # volumes:
+    #   - .:/app
+    #   - /app/obj/
+    #   - /app/bin/
+    #   - /app/api/obj/
+    #   - /app/api/bin/
+    #   - ~/aspnet/https:/https:ro
     depends_on: 
       - db
     environment:
