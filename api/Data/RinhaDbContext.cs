@@ -7,6 +7,4 @@ public class RinhaDbContext(DbContextOptions<RinhaDbContext> options) : DbContex
 {
     public DbSet<Cliente> Clientes => Set<Cliente>();
     public DbSet<Transacao> Transacoes => Set<Transacao>();
-
-    
 }
