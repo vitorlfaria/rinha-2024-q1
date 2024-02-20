@@ -1,14 +1,15 @@
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.EntityFrameworkCore;
 using rinha_2024_q1;
 using rinha_2024_q1.Data;
-using rinha_2024_q1.Entities;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateSlimBuilder(args);
 
-builder.Services.AddDbContext<RinhaDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddDbContextPool<RinhaDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")),
+    poolSize: 100);
+
+builder.Services.AddRequestTimeouts(options => options.DefaultPolicy = new RequestTimeoutPolicy{Timeout = TimeSpan.FromSeconds(60)});
 
 var app = builder.Build();
 
@@ -16,37 +17,9 @@ app.MapGet("/healthcheck", () => "Working, thanks!");
 
 var clientApi = app.MapGroup("/clientes");
 
-clientApi.MapPost("/{id}/transacoes", (int id, TransacaoRequest transacaorequest) => {
-    try
-    {
-        transacaorequest.Validate();
-        var transacaoResponse = new TransacaoResponse(1000, -2345);
-        return Results.Ok(transacaoResponse);
-    }
-    catch (Exception e)
-    {
-        return Results.UnprocessableEntity(e.Message);
-    }
-});
+clientApi.MapPost("/{id}/transacoes", ClienteService.HandleTransacao);
 
-clientApi.MapGet("/{id}/extrato", (int id) => {
-    var extrato = new Extrato
-    {
-        Saldo = new Saldo
-        {
-            Total = 1000,
-            Data_Extrato = DateTime.Now,
-            Limite = 5000
-        },
-        Ultimas_transacoes = new List<TransacaoDto>
-        {
-            new(1000, "credito", "Descrição", DateTime.Now),
-            new(-2345, "debito", "Descrição", DateTime.Now)
-        }
-    };
-
-    return Results.Ok(extrato);
-});
+clientApi.MapGet("/{id}/extrato", ClienteService.HandleExtrato);
 
 clientApi.MapGet("/", ClienteService.GetClientes);
 

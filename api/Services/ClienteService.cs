@@ -44,12 +44,58 @@ public static class ClienteService
             Saldo = new Saldo
             {
                 Limite = cliente.Limite,
-                Data_Extrato = DateTime.Now,
+                Data_Extrato = DateTime.Now.ToUniversalTime(),
                 Total = cliente.Saldo
             },
             Ultimas_transacoes = transacaoDtos
         };
 
         return Results.Ok(extrato);
+    }
+
+    public static async Task<IResult> HandleTransacao(int id, [FromBody] TransacaoRequest transacaoRequest, [FromServices] RinhaDbContext context)
+    {
+        try
+        {
+            transacaoRequest.Validate();
+            var pgTransaction = context.Database.BeginTransaction();
+            Cliente cliente = await context.Clientes.FindAsync(id);
+            if (cliente == null)
+            {
+                return Results.NotFound("Cliente não encontrado");
+            }
+
+            if(transacaoRequest.Tipo == "c")
+            {
+                cliente.Saldo += transacaoRequest.Valor;
+            }
+            else if(transacaoRequest.Tipo == "d")
+            {
+                int novoSaldo = cliente.Saldo - transacaoRequest.Valor;
+                if(novoSaldo < (cliente.Limite * -1))
+                {
+                    return Results.UnprocessableEntity("Limite excedido");
+                }
+                cliente.Saldo = novoSaldo;
+            }
+
+            context.Transacoes.Add(new Transacao
+            {
+                ClienteId = id,
+                Valor = transacaoRequest.Valor,
+                Tipo = transacaoRequest.Tipo,
+                Descricao = transacaoRequest.Descricao,
+                Realizada_Em = DateTime.Now.ToUniversalTime()
+            });
+
+            await context.SaveChangesAsync();
+            await pgTransaction.CommitAsync();
+
+            return Results.Ok(new TransacaoResponse(cliente.Limite, cliente.Saldo));
+        }
+        catch (ArgumentException e)
+        {
+            return Results.UnprocessableEntity(e.Message);
+        }
     }
 }

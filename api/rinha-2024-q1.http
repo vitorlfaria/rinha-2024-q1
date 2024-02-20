@@ -9,9 +9,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "valor": 1000,
-    "tipo": "c",
-    "descricao": "descricao"
+    "valor": 1,
+    "tipo": "d",
+    "descricao": null
 }
 
 ###
