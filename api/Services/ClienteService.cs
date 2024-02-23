@@ -93,7 +93,7 @@ public static class ClienteService
 
             return Results.Ok(new TransacaoResponse(cliente.Limite, cliente.Saldo));
         }
-        catch (ArgumentException e)
+        catch (Exception e)
         {
             return Results.UnprocessableEntity(e.Message);
         }
